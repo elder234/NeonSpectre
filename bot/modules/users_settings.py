@@ -109,13 +109,13 @@ def get_user_settings(from_user, key=None):
         button = buttons.build_menu(2)
         text = f'''<u>Universal Settings for <a href='tg://user?id={user_id}'>{name}</a></u>
 
-╭ YT-DLP Quality : <b>{escape(ytq)}</b>
-├ Daily Tasks : <b>{dailytas} / {dailytl} per day</b>
-├ Last Bot Used : <b>{lastused}</b>
-├ User Bot PM : <b>{ubotpm}</b>
-├ List Type : <b>{ulist}</b>
-├ IMDB : <b>{imdbval if imdbval else imdb}</b>
-├ AniList : <b>{anival if anival else anilist}</b>
+YT-DLP Quality : <b>{escape(ytq)}</b>
+Daily Tasks : <b>{dailytas} / {dailytl} per day</b>
+Last Bot Used : <b>{lastused}</b>
+User Bot PM : <b>{ubotpm}</b>
+List Type : <b>{ulist}</b>
+IMDB : <b>{imdbval if imdbval else imdb}</b>
+AniList : <b>{anival if anival else anilist}</b>
 '''
     elif key == 'mirror':
         prefix = user_dict['mprefix'] if user_dict and user_dict.get('mprefix') else "Not Exists"
@@ -168,12 +168,12 @@ def get_user_settings(from_user, key=None):
         button = buttons.build_menu(2)
         text = f'''<u>Mirror/Clone Settings for <a href='tg://user?id={user_id}'>{name}</a></u>
 
-╭ Prefix : <b>{escape(prefix)}</b>
-├ Suffix : <b>{suffix}</b>
-├ User TD Mode : <b>{usertdstatus}</b>
-├ User TeamDrive(s) : <b>{usertds if usertds else usertd}</b>
-├ Daily Upload : <b>{dailyup} / {dailytlup} per day</b>
-├ Remname : <code>{escape(remname)}</code>
+Prefix : <b>{escape(prefix)}</b>
+Suffix : <b>{suffix}</b>
+User TD Mode : <b>{usertdstatus}</b>
+User TeamDrive(s) : <b>{usertds if usertds else usertd}</b>
+Daily Upload : <b>{dailyup} / {dailytlup} per day</b>
+Remname : <code>{escape(remname)}</code>
 '''
     elif key == 'leech':
         prefix = user_dict['prefix'] if user_dict and user_dict.get('prefix') else "Not Exists"
@@ -222,24 +222,24 @@ def get_user_settings(from_user, key=None):
         button = buttons.build_menu(2)
         text = f'''<u>Leech Settings for <a href='tg://user?id={user_id}'>{name}</a></u>
 
-╭ Leech Type : <b>{ltype}</b>
-├ Custom Thumbnail : <b>{thumbmsg}</b>
-├ UserLog : <b>{userlog}</b>
-├ Prefix : <b>{escape(prefix)}</b>
-├ Suffix : <b>{suffix}</b>
-├ Caption : <b>{escape(caption)}</b>
-├ CapFont : {cfont}
-├ Leech Split Size : <b>{lsplit}</b>
-├ Equal Split : <b>{esplits}</b>
-├ Daily Leech : <b>{dailyll} / {dailytlle} per day</b>
-├ Remname : <code>{escape(remname)}</code>
+Leech Type : <b>{ltype}</b>
+Custom Thumbnail : <b>{thumbmsg}</b>
+UserLog : <b>{userlog}</b>
+Prefix : <b>{escape(prefix)}</b>
+Suffix : <b>{suffix}</b>
+Caption : <b>{escape(caption)}</b>
+CapFont : {cfont}
+Leech Split Size : <b>{lsplit}</b>
+Equal Split : <b>{esplits}</b>
+Daily Leech : <b>{dailyll} / {dailytlle} per day</b>
+Remname : <code>{escape(remname)}</code>
 '''
     if uplan == "Paid User" and key:
         ex_date = user_dict.get('expiry_date', False)
         if not ex_date: ex_date = 'Not Specified'
-        text += f"├ User Plan : <b>{uplan}</b>\n"
-        text += f"╰ Expiry Date : <b>{ex_date}</b>"
-    elif key: text += f"╰ User Plan : <b>{uplan}</b>"
+        text += f"User Plan : <b>{uplan}</b>\n"
+        text += f"Expiry Date : <b>{ex_date}</b>"
+    elif key: text += f"User Plan : <b>{uplan}</b>"
     return text, button
 
 def update_user_settings(message, from_user, key):
