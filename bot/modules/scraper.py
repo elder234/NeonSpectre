@@ -98,10 +98,10 @@ def scrapper(update, context):
         parse_data = f"<b><u>{soup.title.string}</u></b>"
         for no, (t, m) in enumerate(zip(tor, mag), start=1):
             filename = resub(r"www\S+|\- |\.torrent", "", t.string)
-            parse_data += f"""
+            parse_data += (f"""
             
 {no}. <code>{filename}</code>
-┖ <b>Links :</b> <a href="https://t.me/share/url?url={m['href'].split('&')[0]}"><b>Magnet </b>🧲</a>  | <a href="{t['href']}"><b>Torrent 🌐</b></a>"""
+┖ <b>Links :</b> <a href="https://t.me/share/url?url={m['href'].split('&')[0]}"><b>Magnet </b>🧲</a>  | <a href="{t['href']}"><b>Torrent 🌐</b></a>""")
         editMessage(parse_data, sent)
 
     elif "teluguflix" in link:
@@ -125,22 +125,43 @@ def scrapper(update, context):
                 sent = sendMessage("<i>Running More Scrape ...</i>", context.bot, update.message)
                 gd_txt = ""
     elif "cinevood" in link:
-        prsd = ""
-        links = []
-        res = rget(link)
-        soup = BeautifulSoup(res.text, 'html.parser')
-        x = soup.select('a[href^="https://filepress"]')
-        for a in x:
-            links.append(a['href'])
-        for o in links:
-            res = rget(o)
-            soup = BeautifulSoup(res.content, "html.parser")
-            title = soup.title
-            prsd += f'{title}\n{o}\n\n'
-            if len(prsd) > 4000:
-                sendMessage(prsd, context.bot, update.message)
-                prsd = ""
-        if prsd != "":
+       sent = sendMessage('Running Scrape ...', context.bot, update.message)
+       soup = BeautifulSoup(r.text, "html.parser")
+       titles = soup.select("h6")
+       links_by_title = {}
+
+    # Extract the post title from the webpage's title
+       post_title = soup.title.string.strip()
+
+       for title in titles:
+           title_text = title.text.strip()
+           gdtot_links = title.find_next("a", href=lambda href: "gdtot" in href.lower())
+           multiup_links = title.find_next("a", href=lambda href: "multiup" in href.lower())
+           filepress_links = title.find_next("a", href=lambda href: "filepress" in href.lower())
+           gdflix_links = title.find_next("a", href=lambda href: "gdflix" in href.lower())
+           kolop_links = title.find_next("a", href=lambda href: "kolop" in href.lower())
+           zipylink_links = title.find_next("a", href=lambda href: "zipylink" in href.lower())
+
+           links = []
+           if gdtot_links:
+              links.append(f'<a href="{gdtot_links["href"]}" style="text-decoration:none;"><b>GDToT</b></a>')
+           if multiup_links:
+            links.append(f'<a href="{multiup_links["href"]}" style="text-decoration:none;"><b>MultiUp</b></a>')
+           if filepress_links:
+            links.append(f'<a href="{filepress_links["href"]}" style="text-decoration:none;"><b>FilePress</b></a>')
+          if gdflix_links:
+            links.append(f'<a href="{gdflix_links["href"]}" style="text-decoration:none;"><b>GDFlix</b></a>')
+          if kolop_links:
+            links.append(f'<a href="{kolop_links["href"]}" style="text-decoration:none;"><b>Kolop</b></a>')
+          if zipylink_links:
+            links.append(f'<a href="{zipylink_links["href"]}" style="text-decoration:none;"><b>ZipyLink</b></a>')
+          if links:
+            links_by_title[title_text] = links
+
+       prsd = f"<b>🔖 Title:</b> {post_title}\n"
+       for title, links in links_by_title.items():
+           prsd += f"\n┏<b>🏷️ Name:</b> <code>{title}</code>\n"
+           prsd += "┗<b>🔗 Links:</b> " + " | ".join(links) + "\n"
             sendMessage(prsd, context.bot, update.message)
     elif "atishmkv" in link:
         prsd = ""
