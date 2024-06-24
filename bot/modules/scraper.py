@@ -88,6 +88,22 @@ def scrapper(update, context):
                 gd_txt = ""
         if gd_txt != "":
             sendMessage(gd_txt, context.bot, update.message)
+    elif "tamilmv" in link:
+        sent = sendMessage('Running Scrape...', context.bot, update.message)
+        cget = cloudscraper.create_scraper().request
+        resp = cget("GET", link)
+        soup = BeautifulSoup(resp.text, "html.parser")
+        mag = soup.select('a[href^="magnet:?xt=urn:btih:"]')
+        tor = soup.select('a[data-fileext="torrent"]')
+        parse_data = f"<b><u>{soup.title.string}</u></b>"
+        for no, (t, m) in enumerate(zip(tor, mag), start=1):
+            filename = resub(r"www\S+|\- |\.torrent", "", t.string)
+            parse_data += f"""
+            
+{no}. <code>{filename}</code>
+┖ <b>Links :</b> <a href="https://t.me/share/url?url={m['href'].split('&')[0]}"><b>Magnet </b>🧲</a>  | <a href="{t['href']}"><b>Torrent 🌐</b></a>"""
+        editMessage(parse_data, sent)
+
     elif "teluguflix" in link:
         sent = sendMessage('Running Scrape ...', context.bot, update.message)
         gd_txt = ""
@@ -99,6 +115,7 @@ def scrapper(update, context):
         for no, link in enumerate(links, start=1):
             gdlk = link['href']
             t = rget(gdlk)
+            
             soupt = BeautifulSoup(t.text, "html.parser")
             title = soupt.select('meta[property^="og:description"]')
             gd_txt += f"{no}. <code>{(title[0]['content']).replace('Download ', '')}</code>\n{gdlk}\n\n"
