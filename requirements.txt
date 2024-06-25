@@ -42,6 +42,7 @@ python-magic
 playwright
 qbittorrent-api
 requests
+Speedtest-cli
 telegraph
 tenacity
 tgcrypto
