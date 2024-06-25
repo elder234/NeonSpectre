@@ -59,7 +59,7 @@ class EngineStatus:
     STATUS_GD = "Google Api"
     STATUS_MEGA = "MegaSDK"
     STATUS_QB = "qBittorrent"
-    STATUS_TG = "Pyrogram"
+    STATUS_TG = "Hgram"
     STATUS_YT = "YT-dlp"
     STATUS_EXT = "Extract | pExtract"
     STATUS_SPLIT_MERGE = "FFmpeg"
