@@ -9,9 +9,9 @@ bencoding
 beautifulsoup4
 cinemagoer
 cryptography
-cfscrape==2.1.1
+cfscrape
 urllib3==1.26.15
-cloudscraper==2.1.1
+cloudscraper
 dnspython
 feedparser
 flask
