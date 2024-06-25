@@ -73,10 +73,10 @@ download_dict = {}
 rss_dict = {}
 btn_listener = {}
 
-if ospath.exists('pyrogram.session'):
-    osremove('pyrogram.session')
-if ospath.exists('pyrogram.session-journal'):
-    osremove('pyrogram.session-journal')
+if ospath.exists('hydrogram.session'):
+    osremove('hydrogram.session')
+if ospath.exists('hydrogram.session-journal'):
+    osremove('hydrogram.session-journal')
 
 BOT_TOKEN = environ.get('BOT_TOKEN', '')
 if len(BOT_TOKEN) == 0:
