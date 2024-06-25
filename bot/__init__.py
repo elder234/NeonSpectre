@@ -12,7 +12,7 @@ from subprocess import Popen, run as srun, check_output
 from time import sleep, time
 from threading import Thread, Lock
 from dotenv import load_dotenv
-from pyrogram import Client, enums
+from hydrogram import Client, enums
 from asyncio import get_event_loop
 from pymongo import MongoClient
 
@@ -247,7 +247,7 @@ if len(DEF_IMDB_TEMP) == 0:
 <a href="{url_cast}">Read More ...</a>'''
 
 LOGGER.info("Generating SESSION_STRING")
-app = Client(name='pyrogram', api_id=(TELEGRAM_API), api_hash=TELEGRAM_HASH, bot_token=BOT_TOKEN, parse_mode=enums.ParseMode.HTML, no_updates=True)
+app = Client("hydrogram", api_id=(TELEGRAM_API), api_hash=TELEGRAM_HASH, bot_token=BOT_TOKEN, parse_mode=enums.ParseMode.HTML, no_updates=True)
 
 MEGA_API_KEY = environ.get('MEGA_API_KEY', '')
 if len(MEGA_API_KEY) == 0:
@@ -272,7 +272,7 @@ else:
 try:
     USER_SESSION_STRING = environ.get('USER_SESSION_STRING', '')
     if len(USER_SESSION_STRING) != 0:
-        premium_session = Client('WZML-Premium', api_id=TELEGRAM_API, api_hash=TELEGRAM_HASH, session_string=USER_SESSION_STRING, parse_mode=enums.ParseMode.HTML, no_updates=True)
+        premium_session = Client("Premium", api_id=TELEGRAM_API, api_hash=TELEGRAM_HASH, session_string=USER_SESSION_STRING, parse_mode=enums.ParseMode.HTML, no_updates=True)
     if not premium_session:
         LOGGER.error("Cannot initialized User Session. Please regenerate USER_SESSION_STRING")
     else:
