@@ -1,5 +1,8 @@
 FROM balapriyanb/neonspectre:latest
 
+WORKDIR /usr/src/app
 COPY . .
 
-CMD ["bash", "start.sh"]
+RUN chmod +x start.sh
+
+CMD ["bash", "./start.sh"]
