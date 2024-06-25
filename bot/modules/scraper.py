@@ -145,17 +145,17 @@ def scrapper(update, context):
            if gdtot_links:
               links.append(f'<a href="{gdtot_links["href"]}" style="text-decoration:none;"><b>GDToT</b></a>')
            if multiup_links:
-            links.append(f'<a href="{multiup_links["href"]}" style="text-decoration:none;"><b>MultiUp</b></a>')
+              links.append(f'<a href="{multiup_links["href"]}" style="text-decoration:none;"><b>MultiUp</b></a>')
            if filepress_links:
-            links.append(f'<a href="{filepress_links["href"]}" style="text-decoration:none;"><b>FilePress</b></a>')
-          if gdflix_links:
-            links.append(f'<a href="{gdflix_links["href"]}" style="text-decoration:none;"><b>GDFlix</b></a>')
-          if kolop_links:
-            links.append(f'<a href="{kolop_links["href"]}" style="text-decoration:none;"><b>Kolop</b></a>')
-          if zipylink_links:
-            links.append(f'<a href="{zipylink_links["href"]}" style="text-decoration:none;"><b>ZipyLink</b></a>')
-          if links:
-            links_by_title[title_text] = links
+              links.append(f'<a href="{filepress_links["href"]}" style="text-decoration:none;"><b>FilePress</b></a>')
+           if gdflix_links:
+              links.append(f'<a href="{gdflix_links["href"]}" style="text-decoration:none;"><b>GDFlix</b></a>')
+           if kolop_links:
+              links.append(f'<a href="{kolop_links["href"]}" style="text-decoration:none;"><b>Kolop</b></a>')
+           if zipylink_links:
+              links.append(f'<a href="{zipylink_links["href"]}" style="text-decoration:none;"><b>ZipyLink</b></a>')
+           if links:
+              links_by_title[title_text] = links
 
        prsd = f"<b>🔖 Title:</b> {post_title}\n"
        for title, links in links_by_title.items():
