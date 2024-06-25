@@ -264,5 +264,92 @@ def scrapper(update, context):
             LOGGER.error(e)
             sendMessage(f'Something went wrong: {e}', context.bot, update.message)
 
+def looper(dict_key, click):
+    payload_data = DDL_REGEX.search(click).group(0).split("DDL(")[1].replace(")", "").split(",")
+    data = {
+           "action" : "DDL",
+           "post_id": post_id,
+           "div_id" : payload_data[0].strip(),
+           "tab_id" : payload_data[1].strip(),
+           "num"    : payload_data[2].strip(),
+           "folder" : payload_data[3].strip(),
+    }
+    new_num = data["num"].split("'")[1]
+    data["num"] = new_num
+    response = rpost("https://animekaizoku.com/wp-admin/admin-ajax.php", headers={"x-requested-with": "XMLHttpRequest", "referer": "https://animekaizoku.com"}, data=data)  
+    loop_soup = BeautifulSoup(response.text, "html.parser")
+    downloadbutton = loop_soup.find_all(class_="downloadbutton")
+
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        [executor.submit(ouo_parse, dict_key, button, loop_soup) for button in downloadbutton]
+
+def ouo_parse(dict_key, button, loop_soup):          
+    try:
+        ouo_encrypt = recompile(r"openInNewTab\(([^),]+\)"")").search(str(loop_soup)).group(0).strip().split('"')[1]
+        ouo_decrypt = b64decode(ouo_encrypt).decode("utf-8").strip()
+        try: decrypted_link= ouo(ouo_decrypt)
+        except: decrypted_link = ouo_decrypt
+        data_dict[dict_key].append([button.text.strip(), decrypted_link.strip()])  
+    except: looper(dict_key, str(button))  
+
+def authIndex(username, password):
+    try:
+        token = "Basic "+b64encode(f"{username}:{password}".encode()).decode()
+        return token, False
+    except Exception as e:
+        LOGGER.error('[Index Scrape] Error :'+e)
+        return e, True
+
+def indexScrape(payload_input, url, auth, folder_mode=False): 
+    global next_page 
+    global next_page_token
+    folNo, filNo = 0, 0
+
+    url = f"{url}/" if url[-1] != '/' else url
+
+    ses = cloudscraper.create_scraper(allow_brotli=False)
+    encrypted_response = ses.post(url, data=payload_input, headers={"authorization":auth})
+    if encrypted_response.status_code == 401:
+        return "Could not Acess your Entered URL!, Check your Username / Password", True
+
+    try: decrypted_response = json.loads(b64decode((encrypted_response.text)[::-1][24:-20]).decode('utf-8'))
+    except: return "Something Went Wrong. Check Index Link / Username / Password Valid or Not", True
+
+    page_token = decrypted_response["nextPageToken"] 
+    if page_token == None: 
+        next_page = False 
+    else: 
+        next_page = True 
+        next_page_token = page_token
+    result = []
+    if list(decrypted_response.get("data").keys())[0] == "error":
+        return "Nothing Found in Your Entered URL", True
+    else:
+        file_length = len(decrypted_response["data"]["files"])
+        for i, _ in enumerate(range(file_length)):
+            files_type = decrypted_response["data"]["files"][i]["mimeType"] 
+            files_name = decrypted_response["data"]["files"][i]["name"]
+            if files_type == "application/vnd.google-apps.folder":
+                folNo += 1
+                direct_download_link = url + quote(files_name) + '/'
+                if not folder_mode:
+                    result.append(f"{i+1}. <b>{files_name}</b>\n⇒ <a href='{direct_download_link}'>Index Link</a>\n\n")
+                    data, error = indexScrape({"page_token":next_page_token, "page_index": 0}, direct_download_link, auth)
+                    result.extend(["---------------------------------------------\n\n"] + data + ["---------------------------------------------\n\n"]) 
+            else:
+                filNo += 1
+                file_size = int(decrypted_response["data"]["files"][i]["size"])
+                direct_download_link = url + quote(files_name)
+                if folder_mode: result.append(direct_download_link)
+                else: result.append(f"{i+1}. <b>{files_name} - {get_readable_file_size(file_size)}</b>\n⇒ <a href='{direct_download_link}'>Index Link</a>\n\n")
+            if filNo > 30 or folNo > 2:
+                if not folder_mode:
+                    result.append(f"Exceeded Usage! Link Contains More than 2 Folders or More than 30 Files")
+                break
+        if not folder_mode:
+            result.insert(0, f"<b>Total Folders :</b> {folNo}\n<b>Total Files :</b> {filNo}\n\n")
+    if not folder_mode: return result, False
+    else: return result, False
+        
 scrapper_handler = CommandHandler(BotCommands.ScrapeCommand, scrapper, filters=CustomFilters.owner_filter | CustomFilters.authorized_user)
 dispatcher.add_handler(scrapper_handler)
