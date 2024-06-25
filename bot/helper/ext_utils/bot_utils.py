@@ -253,14 +253,14 @@ def get_readable_message():
                     msg += f"\n<b>Process:</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
                     msg += f"\n<b>Speed:</b> {download.speed()}"
                     msg += f" | <b>ETA:</b> {download.eta()}"
-                    msg += f'\n<b>Engine :</b> <a href="https://t.me/c/{chatid}/{download.message.message_id}">{download.eng()}</a>'
+                    msg += f'\n<b>Engine :</b> {download.eng()}'
 
                 else:
                     msg += f"\n<b></b>{get_progress_bar_string(download)} {download.progress()}"
                     msg += f"\n<b>Processed:</b> {get_readable_file_size(download.processed_bytes())} of {download.size()}"
                     msg += f"\n<b>Speed:</b> {download.speed()}"
                     msg += f"\n<b> | ETA:</b> {download.eta()}"
-                    msg += f'\n<b>Engine :</b> <a href="https://t.me/c/{chatid}/{download.message.message_id}">{download.eng()}</a>'
+                    msg += f'\n<b>Engine :</b> {download.eng()}'
 
                 if hasattr(download, 'seeders_num'):
                     try:
