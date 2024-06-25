@@ -11,7 +11,7 @@ cinemagoer
 cryptography
 cfscrape==2.1.1
 urllib3==1.26.6
-cloudscraper
+cloudscraper==2.1.1
 dnspython
 feedparser
 flask
