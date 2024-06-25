@@ -4,8 +4,8 @@ from pycountry import countries as conn
 
 from telegram import Update
 from telegram.ext import CallbackContext, CommandHandler, CallbackQueryHandler
-from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from pyrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
+from hydrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from hydrogram.errors.exceptions.bad_request_400 import MediaEmpty, PhotoInvalidDimensions, WebpageMediaEmpty
 
 from bot.helper.telegram_helper.filters import CustomFilters
 from bot.helper.telegram_helper.message_utils import sendMessage, editMessage
