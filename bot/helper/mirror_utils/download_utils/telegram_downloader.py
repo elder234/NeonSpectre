@@ -12,7 +12,7 @@ from bot.helper.ext_utils.fs_utils import check_storage_threshold
 
 global_lock = Lock()
 GLOBAL_GID = set()
-getLogger("pyrogram").setLevel(WARNING)
+getLogger("hydrogram").setLevel(WARNING)
 
 class TelegramDownloadHelper:
 
