@@ -9,6 +9,7 @@ bencoding
 beautifulsoup4
 cinemagoer
 cryptography
+cfscrape
 cloudscraper
 dnspython
 feedparser
