@@ -1,5 +1,5 @@
-
-FROM balapriyanb/neonspectre:latest
+FROM --platform=linux/amd64 balapriyanb/neonspectre:latest
+#FROM balapriyanb/neonspectre:latest
 
 WORKDIR /usr/src/app
 
