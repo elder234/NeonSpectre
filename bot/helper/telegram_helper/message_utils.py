@@ -3,8 +3,8 @@ from html import escape
 from time import sleep, time
 from telegram import InputMediaPhoto
 from telegram.error import RetryAfter
-from pyrogram import enums
-from pyrogram.errors import FloodWait
+from hydrogram import enums
+from hydrogram.errors import FloodWait
 from os import remove
 from bot import botStartTime
 from bot.helper.ext_utils.bot_utils import get_readable_time
