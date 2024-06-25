@@ -385,7 +385,7 @@ QUEUE_UPLOAD = environ.get('QUEUE_UPLOAD', '')
 QUEUE_UPLOAD = '' if len(QUEUE_UPLOAD) == 0 else int(QUEUE_UPLOAD)
 
 RSS_USER_SESSION_STRING = environ.get('RSS_USER_SESSION_STRING', '')
-rss_session = Client(name='rss_session', api_id=(TELEGRAM_API), api_hash=TELEGRAM_HASH, session_string=RSS_USER_SESSION_STRING, parse_mode=enums.ParseMode.HTML, no_updates=True) if len(RSS_USER_SESSION_STRING) != 0 else None
+rss_session = Client("rss_session", api_id=(TELEGRAM_API), api_hash=TELEGRAM_HASH, session_string=RSS_USER_SESSION_STRING, parse_mode=enums.ParseMode.HTML, no_updates=True) if len(RSS_USER_SESSION_STRING) != 0 else None
 
 RSS_COMMAND = environ.get('RSS_COMMAND', '')
 if len(RSS_COMMAND) == 0:
