@@ -5,6 +5,7 @@ anytree
 apscheduler
 aria2p
 asyncio
+bencode.py
 bencoding
 beautifulsoup4
 cinemagoer
@@ -21,10 +22,14 @@ google-auth-httplib2
 google-auth-oauthlib
 gunicorn
 httpx
+lk21
 lxml>=4.9.1
+markdown
 motor
 mutagen
+mediainfo
 natsort
+oauth2client==3.0.0
 pillow
 psutil
 pybase64
