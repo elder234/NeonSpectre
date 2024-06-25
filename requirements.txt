@@ -6,7 +6,9 @@ apscheduler
 aria2p
 asyncio
 bencoding
-BeautifulSoup
+beautifulsoup4
+cinemagoer
+cryptography
 cloudscraper
 dnspython
 feedparser
