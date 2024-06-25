@@ -10,7 +10,7 @@ beautifulsoup4
 cinemagoer
 cryptography
 cfscrape==2.1.1
-urllib3==1.26.6
+urllib3==1.26.15
 cloudscraper==2.1.1
 dnspython
 feedparser
@@ -21,7 +21,7 @@ google-auth-httplib2
 google-auth-oauthlib
 gunicorn
 httpx
-lxml
+lxml>=4.9.1
 motor
 mutagen
 natsort
