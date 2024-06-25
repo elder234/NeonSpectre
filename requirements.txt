@@ -47,5 +47,6 @@ tenacity
 tgcrypto
 typing_extensions
 uvloop
+waybackpy
 xattr
 yt-dlp
