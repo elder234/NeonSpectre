@@ -161,7 +161,7 @@ def scrapper(update, context):
        for title, links in links_by_title.items():
            prsd += f"\n┏<b>🏷️ Name:</b> <code>{title}</code>\n"
            prsd += "┗<b>🔗 Links:</b> " + " | ".join(links) + "\n"
-        sendMessage(prsd, context.bot, update.message)
+       sendMessage(prsd, context.bot, update.message)
     elif "atishmkv" in link:
         prsd = ""
         links = []
