@@ -58,9 +58,9 @@ class TgUploader:
         if not ospath.lexists(self.__thumb):
             self.__thumb = None
 
-    # ... (other methods of the class) ...
+    # Other methods...
 
-    def upload(self, o_files):
+    async def upload(self, o_files):
         for dirpath, subdir, files in sorted(walk(self.__path)):
             for file_ in sorted(files):
                 if file_ in o_files:
@@ -136,10 +136,7 @@ class TgUploader:
                         up_path = new_path
                     if 'is_leech_log' in user_data and user_data.get('is_leech_log'):
                         for leechchat in self.__leech_log:
-                            if ospath.getsize(up_path) > tgBotMaxFileSize:
-                                usingclient = premium_session
-                            else:
-                                usingclient = self.__app
+                            usingclient = premium_session if ospath.getsize(up_path) > tgBotMaxFileSize else self.__app
                             self.__sent_msg = await usingclient.send_video(
                                 chat_id=int(leechchat),
                                 video=up_path,
@@ -189,10 +186,7 @@ class TgUploader:
                     duration, artist, title = get_media_info(up_path)
                     if 'is_leech_log' in user_data and user_data.get('is_leech_log'):
                         for leechchat in self.__leech_log:
-                            if ospath.getsize(up_path) > tgBotMaxFileSize:
-                                usingclient = premium_session
-                            else:
-                                usingclient = self.__app
+                            usingclient = premium_session if ospath.getsize(up_path) > tgBotMaxFileSize else self.__app
                             self.__sent_msg = await usingclient.send_audio(
                                 chat_id=int(leechchat),
                                 audio=up_path,
