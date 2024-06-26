@@ -1,5 +1,21 @@
+from logging import getLogger, ERROR
+from os import remove as osremove, walk, path as ospath, rename as osrename
+from time import time, sleep
+from hydrogram.errors import FloodWait, RPCError
+from PIL import Image
+from threading import RLock
+import asyncio
+from bot import user_data, GLOBAL_EXTENSION_FILTER, app, tgBotMaxFileSize, premium_session, config_dict
+from bot.helper.ext_utils.fs_utils import take_ss, get_media_info, get_media_streams, clean_unwanted
+from bot.helper.ext_utils.bot_utils import get_readable_file_size, change_filename, get_bot_pm
+from hydrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+
+LOGGER = getLogger(__name__)
+getLogger("hydrogram").setLevel(ERROR)
+IMAGE_SUFFIXES = ("JPG", "JPX", "PNG", "CR2", "TIF", "BMP", "JXR", "PSD", "ICO", "HEIC", "JPEG")
 
 class TgUploader:
+
     def __init__(self, name=None, path=None, size=0, listener=None):
         self.name = name
         self.uploaded_bytes = 0
@@ -33,6 +49,43 @@ class TgUploader:
             self.__sent_msg = await app.get_messages(self.__listener.message.chat.id, self.__listener.uid)
         except Exception as e:
             LOGGER.error(f"Failed to fetch initial message: {e}")
+
+    def upload(self, o_files):
+        for dirpath, subdir, files in sorted(walk(self.__path)):
+            for file_ in sorted(files):
+                if file_ in o_files:
+                    continue
+                if not file_.lower().endswith(tuple(GLOBAL_EXTENSION_FILTER)):
+                    up_path = ospath.join(dirpath, file_)
+                    self.__total_files += 1
+                    try:
+                        if ospath.getsize(up_path) == 0:
+                            LOGGER.error(f"{up_path} size is zero, telegram don't upload zero size files")
+                            self.__corrupted += 1
+                            continue
+                    except Exception as e:
+                        if self.__is_cancelled:
+                            return
+                        LOGGER.error(e)
+                        continue
+                    self.__upload_file(up_path, file_, dirpath)
+                    if self.__is_cancelled:
+                        return
+                    if not self.__listener.isPrivate and not self.__is_corrupted:
+                        self.__msgs_dict[self.__sent_msg.link] = file_
+                    self._last_uploaded = 0
+                    sleep(1)
+        if self.__listener.seed and not self.__listener.newDir:
+            clean_unwanted(self.__path)
+        if self.__total_files == 0:
+            self.__listener.onUploadError('No files to upload. Make sure if you filled USER_SESSION_STRING then you should use supergroup. In case you filled EXTENSION_FILTER then check if all file have this extension')
+            return
+        if self.__total_files <= self.__corrupted:
+            self.__listener.onUploadError('Files Corrupted. Check logs!')
+            return
+        LOGGER.info(f"Leech Completed: {self.name}")
+        size = get_readable_file_size(self.__size)
+        self.__listener.onUploadComplete(None, size, self.__msgs_dict, self.__total_files, self.__corrupted, self.name)
 
     async def __upload_file(self, up_path, file_, dirpath):
         fsize = ospath.getsize(up_path)
@@ -120,6 +173,7 @@ class TgUploader:
                                 await app.copy_message(chat_id=self.__user_id, from_chat_id=self.__sent_msg.chat.id, message_id=self.__sent_msg.id)
                             except Exception as err:
                                 LOGGER.error(f"Failed To Send Video in PM:\n{err}")
+
 
                 elif is_audio:
                     duration, artist, title = get_media_info(up_path)
