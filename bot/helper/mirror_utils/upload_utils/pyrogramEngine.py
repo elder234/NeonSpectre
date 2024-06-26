@@ -78,7 +78,7 @@ class TgUploader:
                             return
                         LOGGER.error(e)
                         continue
-                    asyncio.run(self.__upload_file(up_path, file_, dirpath))
+                    await self.__upload_file(up_path, file_, dirpath)
                     if self.__is_cancelled:
                         return
                     if not self.__listener.isPrivate and not self.__is_corrupted:
