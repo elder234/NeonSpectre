@@ -33,7 +33,7 @@ class TgUploader:
         self.__is_corrupted = False
         self.__sent_msg = None  # Initialize to None, fetch message asynchronously later
         self.__size = size
-        self.__user_settings()
+        self.__user_settings()  # Call the __user_settings method here
         self.__leech_log = user_data.get('is_leech_log')
         self.__app = app
         self.__user_id = listener.message.from_user.id
@@ -49,6 +49,16 @@ class TgUploader:
             self.__sent_msg = await app.get_messages(self.__listener.message.chat.id, self.__listener.uid)
         except Exception as e:
             LOGGER.error(f"Failed to fetch initial message: {e}")
+
+    def __user_settings(self):
+        user_id = self.__listener.message.from_user.id
+        user_dict = user_data.get(user_id, False)
+        if user_dict:
+            self.__as_doc = user_dict.get('as_doc', config_dict['AS_DOCUMENT'])
+        if not ospath.lexists(self.__thumb):
+            self.__thumb = None
+
+    # ... (other methods of the class) ...
 
     def upload(self, o_files):
         for dirpath, subdir, files in sorted(walk(self.__path)):
