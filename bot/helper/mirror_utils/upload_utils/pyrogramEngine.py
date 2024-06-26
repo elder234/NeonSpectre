@@ -15,7 +15,6 @@ getLogger("hydrogram").setLevel(ERROR)
 IMAGE_SUFFIXES = ("JPG", "JPX", "PNG", "CR2", "TIF", "BMP", "JXR", "PSD", "ICO", "HEIC", "JPEG")
 
 class TgUploader:
-
     def __init__(self, name=None, path=None, size=0, listener=None):
         self.name = name
         self.uploaded_bytes = 0
@@ -31,9 +30,9 @@ class TgUploader:
         self.__corrupted = 0
         self.__resource_lock = RLock()
         self.__is_corrupted = False
-        self.__sent_msg = None  # Initialize to None, fetch message asynchronously later
+        self.__sent_msg = None
         self.__size = size
-        self.__user_settings()  # Call the __user_settings method here
+        self.__user_settings()
         self.__leech_log = user_data.get('is_leech_log')
         self.__app = app
         self.__user_id = listener.message.from_user.id
